@@ -1,4 +1,4 @@
-package ru.sbt.hw3;
+package ru.sbt.hw2;
 
 public class Person {
     private final boolean man;
