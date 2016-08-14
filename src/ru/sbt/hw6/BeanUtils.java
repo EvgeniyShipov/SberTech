@@ -1,6 +1,7 @@
 package ru.sbt.hw6;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ public class BeanUtils {
                 getterList.add(method);
             }
         }
+
         for (Method method : methodsTo) {
             if ((method.getName().startsWith("set")) && (method.getParameterTypes().length == 1)) {
                 setterList.add(method);
@@ -42,8 +44,17 @@ public class BeanUtils {
         }
 
         for (Method method : getterList) {
-            if (setterList.contains(method.getName().substring(3))) {
-                // берем из геттера и устанавливаем в сеттер. Завтра допишу)
+            String fieldName = method.getName().substring(3);
+            for (Method method1 : setterList) {
+                if (method1.getName().substring(3).equals(fieldName)) {
+                    try {
+                        method1.invoke(to, method.invoke(from));
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
